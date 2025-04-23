@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Алевтина Додонова](https://up.htmlacademy.ru/javascript-individual/2/user/2586431).
-* Наставник: [Евгений Лепёшкин](https://htmlacademy.ru/profile/spearance).
+* Наставник: [Евгений Лепешкин](https://htmlacademy.ru/profile/spearance).
 
 ---
 
