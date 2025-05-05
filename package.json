@@ -20,6 +20,7 @@
     "start": "vite --port 3000 --open",
     "lint": "eslint js/"
   },
+  "type": "module",
   "engines": {
     "node": "^20",
     "npm": "^10"
