@@ -1,8 +1,4 @@
-import { getRangeArr } from './util.js';
-import { getRandomArrayElement } from './util.js';
-import { getRandomInteger } from './util.js';
-
-const ID = getRangeArr(25);
+import { getRandomArrayElement, getRandomInteger } from './util.js';
 
 const DESCRIPTION = [
   '5 минут, полет нормальный',
@@ -12,18 +8,6 @@ const DESCRIPTION = [
   'В 20:31 прибыл Годжо Сатору',
   'Сидим с бобром за столом',
 ];
-
-const LIKES_MIN = 15;
-const LIKES_MAX = 200;
-
-const LIKES = [];
-for (let i = LIKES_MIN; i <= LIKES_MAX; ++i) {
-  LIKES.push(i);
-}
-
-const NUMBER_COMMENTS_MIN = 0;
-const NUMBER_COMMENTS_MAX = 30;
-
 const AVATAR = [1, 2, 3, 4, 5, 6];
 const MESSAGE = [
   'Всё отлично!',
@@ -67,6 +51,19 @@ const NAME = [
   'Злата',
 ];
 
+const LIKES = [];
+for (let i = 15; i <= 200; ++i) {
+  LIKES.push(i);
+}
+
+const NUMBER_COMMENTS_MIN = 0;
+const NUMBER_COMMENTS_MAX = 30;
+
+const ID = [
+  1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
+  23, 24, 25,
+];
+
 let lastCommentId = 1;
 
 const createComment = () => ({
@@ -88,6 +85,7 @@ const createPost = () => ({
   description: getRandomArrayElement(DESCRIPTION),
   likes: getRandomArrayElement(LIKES),
   similarComments: getRandomSimilarComments(),
+  comments: getRandomInteger(NUMBER_COMMENTS_MIN, NUMBER_COMMENTS_MAX),
 });
 
 const getPosts = (length) => Array.from({ length }, createPost);
