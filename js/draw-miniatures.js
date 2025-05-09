@@ -1,23 +1,33 @@
-import getPosts from './get-posts.js';
+import { openPost } from './full-size-mode';
 
-const drawMiniatures = () => {
+const drawMiniatures = (posts) => {
   const similarListElement = document.querySelector('.pictures');
   const similarPictureTemplate = document.querySelector('#picture').content;
-  const similarPosts = getPosts(25);
 
   const similarListFragment = document.createDocumentFragment();
 
-  similarPosts.forEach(({ url, description, likes, comments }) => {
-    const pictureElement = similarPictureTemplate.cloneNode(true);
-    const pictureImg = pictureElement.querySelector('.picture__img');
+  posts.forEach((post) => {
+    const { id, url, description, likes, comments } = post;
+    const pictureTemplate = similarPictureTemplate.cloneNode(true);
+    const pictureEl = pictureTemplate.querySelector('.picture');
+    const pictureImg = pictureTemplate.querySelector('.picture__img');
+
+    pictureEl.id = id;
     pictureImg.src = url;
     pictureImg.alt = description;
-    pictureElement.querySelector('.picture__likes').textContent = likes;
-    pictureElement.querySelector('.picture__comments').textContent = comments;
-    similarListFragment.appendChild(pictureElement);
+
+    pictureTemplate.querySelector('.picture__likes').textContent = likes;
+    pictureTemplate.querySelector('.picture__comments').textContent = comments;
+
+    pictureEl.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      openPost(post);
+    });
+
+    similarListFragment.appendChild(pictureTemplate);
   });
 
   similarListElement.appendChild(similarListFragment);
 };
 
-export default drawMiniatures;
+export { drawMiniatures };

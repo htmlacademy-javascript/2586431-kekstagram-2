@@ -1,3 +1,6 @@
-import drawMiniatures from './draw-miniatures.js';
+import { drawMiniatures } from './draw-miniatures.js';
+import { getPosts } from './get-posts.js';
 
-drawMiniatures();
+const posts = getPosts(25);
+
+drawMiniatures(posts);

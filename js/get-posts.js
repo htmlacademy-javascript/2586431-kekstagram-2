@@ -90,4 +90,4 @@ const createPost = () => ({
 
 const getPosts = (length) => Array.from({ length }, createPost);
 
-export default getPosts;
+export { getPosts };
