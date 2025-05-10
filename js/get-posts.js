@@ -84,8 +84,7 @@ const createPost = () => ({
   url: `photos/${getRandomArrayElement(ID)}.jpg`,
   description: getRandomArrayElement(DESCRIPTION),
   likes: getRandomArrayElement(LIKES),
-  similarComments: getRandomSimilarComments(),
-  comments: getRandomInteger(NUMBER_COMMENTS_MIN, NUMBER_COMMENTS_MAX),
+  comments: getRandomSimilarComments(),
 });
 
 const getPosts = (length) => Array.from({ length }, createPost);
