@@ -17,7 +17,8 @@ const drawMiniatures = (posts) => {
     pictureImg.alt = description;
 
     pictureTemplate.querySelector('.picture__likes').textContent = likes;
-    pictureTemplate.querySelector('.picture__comments').textContent = comments;
+    pictureTemplate.querySelector('.picture__comments').textContent =
+      comments.length;
 
     pictureEl.addEventListener('click', (evt) => {
       evt.preventDefault();

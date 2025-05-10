@@ -1,5 +1,8 @@
 import { isEscapeKey } from './util.js';
 
+const INITIAL_COMMENTS_COUNT = 5;
+const LOAD_MORE_COMMENTS_COUNT = 5;
+
 const userModalElement = document.querySelector('.big-picture');
 const closeBtnEl = userModalElement.querySelector('#picture-cancel');
 const mainImgEl = userModalElement.querySelector('.big-picture__img > img');
@@ -12,6 +15,7 @@ const totalCommentsCountEl = userModalElement.querySelector(
 );
 const descriptionEl = userModalElement.querySelector('.social__caption');
 const commentsContainerEl = userModalElement.querySelector('.social__comments');
+const loadMoreEl = userModalElement.querySelector('.social__comments-loader');
 
 const onDocumentKeydown = (evt) => {
   if (isEscapeKey(evt)) {
@@ -47,28 +51,45 @@ const getCommentHtml = (comment) => `<li class="social__comment">
   <p class="social__text">${comment.message}</p>
 </li>`;
 
-const setData = (post) => {
-  mainImgEl.src = post.url;
-  likesCountEl.textContent = post.likes;
-  shownCommentsCountEl.textContent = Math.min(5, post.comments);
-  totalCommentsCountEl.textContent = post.comments;
-  descriptionEl.textContent = post.description;
+let post;
+let shownCommentsCount;
 
-  commentsContainerEl.innerHTML = post.similarComments
+const setShownCommentsCount = (count) => {
+  shownCommentsCount = Math.min(count, post.comments.length);
+  shownCommentsCountEl.textContent = shownCommentsCount;
+  if (shownCommentsCount < post.comments.length) {
+    loadMoreEl.classList.remove('hidden');
+  } else {
+    loadMoreEl.classList.add('hidden');
+  }
+  commentsContainerEl.innerHTML = post.comments
+    .slice(0, shownCommentsCount)
     .map(getCommentHtml)
     .join('\n');
-
-  // временно прячем кол-во комментариев и кнопку их подгрузки
-  userModalElement
-    .querySelector('.social__comment-count')
-    .classList.add('hidden');
-  userModalElement
-    .querySelector('.social__comments-loader')
-    .classList.add('hidden');
 };
 
-const openPost = (post) => {
-  setData(post);
+loadMoreEl.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  setShownCommentsCount(shownCommentsCount + LOAD_MORE_COMMENTS_COUNT);
+});
+
+const refreshModal = () => {
+  mainImgEl.src = post.url;
+  likesCountEl.textContent = post.likes;
+
+  totalCommentsCountEl.textContent = post.comments.length;
+  descriptionEl.textContent = post.description;
+
+  setShownCommentsCount(INITIAL_COMMENTS_COUNT);
+};
+
+const setPost = (nextPost) => {
+  post = nextPost;
+  refreshModal();
+};
+
+const openPost = (nextPost) => {
+  setPost(nextPost);
   openUserModal();
 };
 
