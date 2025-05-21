@@ -1,4 +1,4 @@
-import { openPost } from './full-size-mode';
+import { openPost } from './full-size-mode.js';
 
 const drawMiniatures = (posts) => {
   const similarListElement = document.querySelector('.pictures');

@@ -1,4 +1,4 @@
-import { isEscapeKey } from './util';
+import { isEscapeKey } from './util.js';
 
 class Modal {
   constructor(modalEl, closeBtnEl, cfg) {
