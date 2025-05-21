@@ -87,6 +87,6 @@ const createPost = () => ({
   comments: getRandomSimilarComments(),
 });
 
-const getPosts = (length) => Array.from({ length }, createPost);
+const getPosts = (length = 25) => Array.from({ length }, createPost);
 
 export { getPosts };
