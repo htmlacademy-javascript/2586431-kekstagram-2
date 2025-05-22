@@ -1,4 +1,4 @@
-import Pristine from '../vendor/pristine/pristine.min.js';
+import '../vendor/pristine/pristine.min.js';
 import { Modal } from './modal.js';
 
 const uploadInputEl = document.querySelector('input.img-upload__input');
