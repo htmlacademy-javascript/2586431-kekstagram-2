@@ -1,6 +1,3 @@
-import '../vendor/nouislider/nouislider.js';
-import '../vendor/nouislider/nouislider.css';
-
 const fieldScaleControl = document.querySelector('.scale__control--value');
 const scaleSmaller = document.querySelector('.scale__control--smaller');
 const scaleBigger = document.querySelector('.scale__control--bigger');
