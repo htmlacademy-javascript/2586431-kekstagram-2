@@ -1,5 +1,6 @@
 import '../vendor/pristine/pristine.min.js';
 import { Modal } from './modal.js';
+import * as imageProcessing from './image-proccessing.js';
 
 const uploadInputEl = document.querySelector('input.img-upload__input');
 const uploadOverlayEl = document.querySelector('.img-upload__overlay');
@@ -11,26 +12,17 @@ const descriptionEl = document.querySelector('.text__description');
 
 const submitEl = document.querySelector('.img-upload__submit');
 
-formEl.method = 'post';
-formEl.action = 'https://31.javascript.htmlacademy.pro/kekstagram';
-formEl.enctype = 'multipart/form-data';
+imageProcessing.initialize();
 
 const pristine = new Pristine(formEl);
+
+const ERROR_CLASSNAME = 'pristine-error img-upload__field-wrapper--error';
 
 const addValidator = (inputEl, callback, message) => {
   pristine.addValidator(
     inputEl,
     (value) => {
       const res = callback(value) ?? true;
-      if (!res) {
-        inputEl.style.borderColor = 'red';
-        inputEl.style.outlineColor = 'red';
-        inputEl.title = message;
-      } else {
-        inputEl.style.borderColor = 'unset';
-        inputEl.style.outlineColor = 'unset';
-        inputEl.title = '';
-      }
       return res;
     },
     message
@@ -43,19 +35,10 @@ submitEl.addEventListener('click', (evt) => {
   }
 });
 
-addValidator(
-  descriptionEl,
-  (value) => {
-    if (value?.length > 140) {
-      return false;
-    }
-  },
-  'Длина комментария не может составлять больше 140 символов'
-);
-
 const modal = new Modal(uploadOverlayEl, uploadCancelEl, {
   onClose: () => {
     uploadInputEl.value = '';
+    imageProcessing.reset();
   },
 });
 
@@ -72,27 +55,60 @@ const stopPropagation = (evt) => {
 hashtagsEl.addEventListener('keydown', stopPropagation);
 descriptionEl.addEventListener('keydown', stopPropagation);
 
+const descriptionError = document.createElement('div');
+descriptionError.className = ERROR_CLASSNAME;
+descriptionError.style.display = 'none';
+descriptionEl.parentElement.appendChild(descriptionError);
+
+addValidator(
+  descriptionEl,
+  (value) => {
+    if (value?.length > 140) {
+      descriptionError.textContent =
+        'Длина комментария не может составлять больше 140 символов';
+      descriptionError.style.display = 'block';
+      return false;
+    }
+    descriptionError.style.display = 'none';
+  },
+  ''
+);
+
 const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
+
+const hashtagError = document.createElement('div');
+hashtagError.className = ERROR_CLASSNAME;
+hashtagError.style.display = 'none';
+hashtagsEl.parentElement.appendChild(hashtagError);
 
 addValidator(
   hashtagsEl,
   (value) => {
-    const hashtags = value.trim().toLowerCase().split(' ');
+    const hashtags = value.trim().toLowerCase().split(/\s+/);
     if (hashtags.length > 5) {
+      hashtagError.textContent = 'Кол-во хештегов не должно быть больше 5-ти';
+      hashtagError.style.display = 'block';
       return false;
     }
 
     for (const hashtag of hashtags) {
       if (hashtag && !hashtagRegex.test(hashtag)) {
+        hashtagError.textContent =
+          'Хештег должен начинаться с #, иметь длину не более 20 символов и не состоять лишь из одного символа #';
+        hashtagError.style.display = 'block';
         return false;
       }
     }
     const unique = new Set(hashtags);
     if (unique.size < hashtags.length) {
+      hashtagError.textContent = 'Не должно быть повторяющихся хештегов';
+      hashtagError.style.display = 'block';
       return false;
     }
+
+    hashtagError.style.display = 'none';
   },
-  'Кол-во хештегов не должно быть больше 5-ти, не должно быть повторяющихся хештегов, хештег должен начинаться с #, иметь длину не более 20 символов и не состоять лишь из одного символа #'
+  ''
 );
 
 export { initializeForm };
