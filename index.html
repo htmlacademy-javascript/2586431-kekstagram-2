@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./vendor/nouislider/nouislider.css" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/style.css" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
@@ -55,6 +56,9 @@
             <form
               class="img-upload__form"
               id="upload-select-image"
+              method="post"
+              action="https://31.javascript.htmlacademy.pro/kekstagram"
+              enctype="multipart/form-data"
               autocomplete="off"
             >
               <!-- Изначальное состояние поля для загрузки изображения -->
@@ -454,6 +458,8 @@
       </section>
     </template>
 
+    <script src="./vendor/pristine/pristine.min.js" type="module"></script>
+    <script src="./vendor/nouislider/nouislider.js" type="module"></script>
     <script src="./js/main.js" type="module"></script>
   </body>
 </html>
