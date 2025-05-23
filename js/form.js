@@ -1,4 +1,3 @@
-import '../vendor/pristine/pristine.min.js';
 import { Modal } from './modal.js';
 import * as imageProcessing from './image-proccessing.js';
 
