@@ -1,5 +1,7 @@
 import { Modal } from './modal.js';
 import * as imageProcessing from './image-proccessing.js';
+import { api } from './api.js';
+import { notification } from './notification.js';
 
 const uploadInputEl = document.querySelector('input.img-upload__input');
 const uploadOverlayEl = document.querySelector('.img-upload__overlay');
@@ -28,17 +30,30 @@ const addValidator = (inputEl, callback, message) => {
   );
 };
 
-submitEl.addEventListener('click', (evt) => {
-  if (!pristine.validate()) {
-    evt.preventDefault();
-  }
-});
-
 const modal = new Modal(uploadOverlayEl, uploadCancelEl, {
   onClose: () => {
     uploadInputEl.value = '';
     imageProcessing.reset();
+    formEl.reset();
+    resetErrors();
   },
+});
+
+submitEl.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  if (!pristine.validate()) {
+    return;
+  }
+  const body = new FormData(formEl);
+  api
+    .post('/', body)
+    .then(() => {
+      notification.success();
+      modal.close();
+    })
+    .catch(() => {
+      notification.error();
+    });
 });
 
 const initializeForm = () => {
@@ -109,5 +124,10 @@ addValidator(
   },
   ''
 );
+
+function resetErrors() {
+  descriptionError.style.display = 'none';
+  hashtagError.style.display = 'none';
+}
 
 export { initializeForm };
