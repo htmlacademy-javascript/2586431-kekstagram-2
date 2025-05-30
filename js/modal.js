@@ -22,14 +22,14 @@ class Modal {
   open() {
     this.modalEl.classList.remove('hidden');
     document.body.classList.add('modal-open');
-    document.addEventListener('keydown', this.onDocumentKeydown);
+    document.onkeydown = this.onDocumentKeydown;
     this.onOpen?.();
   }
 
   close() {
     this.modalEl.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    document.removeEventListener('keydown', this.onDocumentKeydown);
+    document.onkeydown = undefined;
     this.onClose?.();
   }
 }
