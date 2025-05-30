@@ -1,13 +1,34 @@
+import { isEscapeKey } from './util';
+
+const MILLISECONDS_PER_SECOND = 1000;
+const DEFAULT_TIMEOUT = 5; // в секундах
+
 const dataErrorTemplate = document.getElementById('data-error').content;
 const errorTemplate = document.getElementById('error').content;
 const successTemplate = document.getElementById('success').content;
 
 const showMessage = (template, config = {}) => {
-  const timeout = (config.timeout ?? 5) * 1000;
+  const timeout = (config.timeout ?? DEFAULT_TIMEOUT) * MILLISECONDS_PER_SECOND;
   const message = template.cloneNode(true).children[0];
   document.body.appendChild(message);
-  setTimeout(() => {
+  const previousOnkeydown = document.onkeydown;
+  const close = () => {
     message?.remove();
+    document.onkeydown = previousOnkeydown;
+  };
+  document.onkeydown = (evt) => {
+    if (!isEscapeKey(evt)) {
+      return;
+    }
+    close();
+  };
+  message.onclick = (evt) => {
+    if (evt.target === message) {
+      close();
+    }
+  };
+  setTimeout(() => {
+    close();
   }, timeout);
   return message;
 };
