@@ -1,4 +1,4 @@
-import { isEscapeKey } from './util';
+import { isEscapeKey } from './util.js';
 
 const MILLISECONDS_PER_SECOND = 1000;
 const DEFAULT_TIMEOUT = 5; // в секундах
