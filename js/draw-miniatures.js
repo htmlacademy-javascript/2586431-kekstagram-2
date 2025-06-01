@@ -1,14 +1,22 @@
 import { openPost } from './full-size-mode.js';
 
-const drawMiniatures = (posts) => {
-  const similarListElement = document.querySelector('.pictures');
-  const similarPictureTemplate = document.querySelector('#picture').content;
+const miniaturesContainer = document.querySelector('.pictures');
+const miniatureTemplate = document.querySelector('#picture').content;
 
+const clearPreviousMiniatures = () => {
+  const miniatures = [...miniaturesContainer.querySelectorAll('a.picture')];
+  miniatures.forEach((miniature) => {
+    miniature.remove();
+  });
+};
+
+const drawMiniatures = (posts) => {
   const similarListFragment = document.createDocumentFragment();
 
+  clearPreviousMiniatures();
   posts.forEach((post) => {
     const { id, url, description, likes, comments } = post;
-    const pictureTemplate = similarPictureTemplate.cloneNode(true);
+    const pictureTemplate = miniatureTemplate.cloneNode(true);
     const pictureEl = pictureTemplate.querySelector('.picture');
     const pictureImg = pictureTemplate.querySelector('.picture__img');
 
@@ -28,7 +36,7 @@ const drawMiniatures = (posts) => {
     similarListFragment.appendChild(pictureTemplate);
   });
 
-  similarListElement.appendChild(similarListFragment);
+  miniaturesContainer.appendChild(similarListFragment);
 };
 
 export { drawMiniatures };

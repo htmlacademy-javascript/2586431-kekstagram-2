@@ -45,4 +45,16 @@ function throttle(callback, delayBetweenFrames) {
   };
 }
 
-export { isEscapeKey, debounce, throttle };
+const getRandomUniqueNumbers = (limit, count) => {
+  let current = 0;
+  const numbers = [];
+  for (let i = 0; i < count; i++) {
+    do {
+      current = Math.floor(Math.random() * limit);
+    } while (numbers.includes(current));
+    numbers.push(current);
+  }
+  return numbers;
+};
+
+export { isEscapeKey, debounce, throttle, getRandomUniqueNumbers };
