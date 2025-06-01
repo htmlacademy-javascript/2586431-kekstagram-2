@@ -111,9 +111,18 @@ const initialize = () => {
   setEffect('none');
 };
 
+const setImage = (file) => {
+  if (file) {
+    imgPreview.src = URL.createObjectURL(file);
+  } else {
+    imgPreview.src = '#';
+  }
+};
+
 const reset = () => {
+  setImage();
   setScale(SCALE_DEFAULT);
   setEffect('none');
 };
 
-export { initialize, reset };
+export { initialize, reset, setImage };
