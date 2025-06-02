@@ -57,7 +57,8 @@ submitEl.addEventListener('click', (evt) => {
 });
 
 const initializeForm = () => {
-  uploadInputEl.addEventListener('change', () => {
+  uploadInputEl.addEventListener('change', (evt) => {
+    imageProcessing.setImage(evt.target.files?.[0]);
     modal.open();
   });
 };
