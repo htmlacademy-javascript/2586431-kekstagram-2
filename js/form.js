@@ -44,15 +44,19 @@ submitElement.addEventListener('click', (evt) => {
   if (!pristine.validate()) {
     return;
   }
+  submitElement.disabled = true;
   const body = new FormData(formElement);
   api
     .post('/', body)
     .then(() => {
-      notification.success();
       modal.close();
+      notification.success();
     })
     .catch(() => {
       notification.error();
+    })
+    .finally(() => {
+      submitElement.disabled = false;
     });
 });
 
@@ -70,65 +74,75 @@ const stopPropagation = (evt) => {
 hashtagsElement.addEventListener('keydown', stopPropagation);
 descriptionElement.addEventListener('keydown', stopPropagation);
 
-const descriptionError = document.createElement('div');
-descriptionError.className = ERROR_CLASSNAME;
-descriptionError.style.display = 'none';
-descriptionElement.parentElement.appendChild(descriptionError);
+let descriptionError;
+const setDescriptionError = (message) => {
+  descriptionError?.remove();
+  if (message) {
+    descriptionError = document.createElement('div');
+    descriptionError.className = ERROR_CLASSNAME;
+    descriptionError.textContent = message;
+    descriptionElement.parentElement.appendChild(descriptionError);
+  }
+};
 
 addValidator(
   descriptionElement,
   (value) => {
     if (value?.length > 140) {
-      descriptionError.textContent =
-        'Длина комментария не может составлять больше 140 символов';
-      descriptionError.style.display = 'block';
+      setDescriptionError(
+        'Длина комментария не может составлять больше 140 символов'
+      );
       return false;
     }
-    descriptionError.style.display = 'none';
+    setDescriptionError();
   },
   ''
 );
 
 const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
 
-const hashtagError = document.createElement('div');
-hashtagError.className = ERROR_CLASSNAME;
-hashtagError.style.display = 'none';
-hashtagsElement.parentElement.appendChild(hashtagError);
+let hashtagError;
+const setHashtagError = (message) => {
+  hashtagError?.remove();
+  if (message) {
+    hashtagError = document.createElement('div');
+    hashtagError.className = ERROR_CLASSNAME;
+    hashtagError.textContent = message;
+    hashtagsElement.parentElement.appendChild(hashtagError);
+  }
+};
 
 addValidator(
   hashtagsElement,
   (value) => {
     const hashtags = value.trim().toLowerCase().split(/\s+/);
     if (hashtags.length > 5) {
-      hashtagError.textContent = 'Кол-во хештегов не должно быть больше 5-ти';
-      hashtagError.style.display = 'block';
+      setHashtagError('Кол-во хештегов не должно быть больше 5-ти');
       return false;
     }
 
     for (const hashtag of hashtags) {
       if (hashtag && !hashtagRegex.test(hashtag)) {
-        hashtagError.textContent =
-          'Хештег должен начинаться с #, иметь длину не более 20 символов и не состоять лишь из одного символа #';
-        hashtagError.style.display = 'block';
+        setHashtagError(
+          'Хештег должен начинаться с #, иметь длину не более 20 символов и не состоять лишь из одного символа #'
+        );
         return false;
       }
     }
     const unique = new Set(hashtags);
     if (unique.size < hashtags.length) {
-      hashtagError.textContent = 'Не должно быть повторяющихся хештегов';
-      hashtagError.style.display = 'block';
+      setHashtagError('Не должно быть повторяющихся хештегов');
       return false;
     }
 
-    hashtagError.style.display = 'none';
+    setHashtagError();
   },
   ''
 );
 
 function resetErrors() {
-  descriptionError.style.display = 'none';
-  hashtagError.style.display = 'none';
+  setDescriptionError();
+  setHashtagError();
 }
 
 export { initializeForm };
