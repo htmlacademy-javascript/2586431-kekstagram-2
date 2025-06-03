@@ -1,12 +1,12 @@
 import { drawMiniatures } from './draw-miniatures.js';
 import { initializeForm } from './form.js';
 import { getPosts } from './get-posts.js';
-import { getRandomUniqueNumbers, throttle } from './util.js';
+import { debounce, getRandomUniqueNumbers } from './util.js';
+
+const RANDOM_POSTS_COUNT = 10;
 
 const filtersWrapper = document.querySelector('.img-filters');
 const filterButtons = [...document.querySelectorAll('.img-filters__button')];
-
-const RANDOM_POSTS_COUNT = 10;
 
 const filters = {
   default: (posts) => posts,
@@ -28,7 +28,7 @@ const setActiveFilter = (value) => {
   });
 };
 
-const loadPosts = throttle((filter = 'default') => {
+const loadPosts = debounce((filter = 'default') => {
   getPosts()
     .then(filters[filter])
     .then((posts) => {

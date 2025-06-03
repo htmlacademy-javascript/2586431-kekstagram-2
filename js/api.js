@@ -1,19 +1,23 @@
 const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
+const ERROR_STATUS_START = 400;
+const SUCCESS_STATUS_START = 200;
+const SUCCESS_STATUS_END = 299;
 
 const getUrl = (endpoint) =>
   `${BASE_URL}/${endpoint[0] === '/' ? endpoint.slice(1) : endpoint}`;
 
 const isSuccess = (response) => {
-  // Статусы 200..299 считаем успешными (https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status)
-  if (response.status >= 200 && response.status < 300) {
+  if (
+    response.status >= SUCCESS_STATUS_START &&
+    response.status <= SUCCESS_STATUS_END
+  ) {
     return true;
   }
   return false;
 };
 
 const isError = (response) => {
-  // 400 и далее - ошибка (всё та же спецификация)
-  if (response.status >= 400) {
+  if (response.status >= ERROR_STATUS_START) {
     return true;
   }
   return false;

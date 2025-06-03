@@ -4,39 +4,44 @@ const INITIAL_COMMENTS_COUNT = 5;
 const LOAD_MORE_COMMENTS_COUNT = 5;
 
 const userModalElement = document.querySelector('.big-picture');
-const closeBtnEl = userModalElement.querySelector('#picture-cancel');
-const mainImgEl = userModalElement.querySelector('.big-picture__img > img');
-const likesCountEl = userModalElement.querySelector('.likes-count');
-const shownCommentsCountEl = userModalElement.querySelector(
+const closeButtonElement = userModalElement.querySelector('#picture-cancel');
+const mainImgElement = userModalElement.querySelector(
+  '.big-picture__img > img'
+);
+const likesCountElement = userModalElement.querySelector('.likes-count');
+const shownCommentsCountElement = userModalElement.querySelector(
   '.social__comment-shown-count'
 );
-const totalCommentsCountEl = userModalElement.querySelector(
+const totalCommentsCountElement = userModalElement.querySelector(
   '.social__comment-total-count'
 );
-const descriptionEl = userModalElement.querySelector('.social__caption');
-const commentsContainerEl = userModalElement.querySelector('.social__comments');
-const loadMoreEl = userModalElement.querySelector('.social__comments-loader');
+const descriptionElement = userModalElement.querySelector('.social__caption');
+const commentsContainerElement =
+  userModalElement.querySelector('.social__comments');
+const loadMoreElement = userModalElement.querySelector(
+  '.social__comments-loader'
+);
 
-const modal = new Modal(userModalElement, closeBtnEl);
+const modal = new Modal(userModalElement, closeButtonElement);
 
 const appendComment = (comment) => {
-  const commentEl = document.createElement('li');
-  commentEl.classList.add('social__comment');
+  const commentElement = document.createElement('li');
+  commentElement.classList.add('social__comment');
 
-  const imgEl = document.createElement('img');
-  imgEl.classList.add('social__picture');
-  imgEl.src = comment.avatar;
-  imgEl.alt = comment.name;
-  imgEl.width = 35;
-  imgEl.height = 35;
-  commentEl.appendChild(imgEl);
+  const imgElement = document.createElement('img');
+  imgElement.classList.add('social__picture');
+  imgElement.src = comment.avatar;
+  imgElement.alt = comment.name;
+  imgElement.width = 35;
+  imgElement.height = 35;
+  commentElement.appendChild(imgElement);
 
-  const textEl = document.createElement('p');
-  textEl.classList.add('social__text');
-  textEl.textContent = comment.message;
-  commentEl.appendChild(textEl);
+  const textElement = document.createElement('p');
+  textElement.classList.add('social__text');
+  textElement.textContent = comment.message;
+  commentElement.appendChild(textElement);
 
-  commentsContainerEl.appendChild(commentEl);
+  commentsContainerElement.appendChild(commentElement);
 };
 
 let post;
@@ -45,30 +50,30 @@ let shownCommentsCount;
 const setShownCommentsCount = (count) => {
   const prevCount = shownCommentsCount;
   shownCommentsCount = Math.min(count, post.comments.length);
-  shownCommentsCountEl.textContent = shownCommentsCount;
+  shownCommentsCountElement.textContent = shownCommentsCount;
   if (shownCommentsCount < post.comments.length) {
-    loadMoreEl.classList.remove('hidden');
+    loadMoreElement.classList.remove('hidden');
   } else {
-    loadMoreEl.classList.add('hidden');
+    loadMoreElement.classList.add('hidden');
   }
   const start = prevCount < shownCommentsCount ? prevCount : 0;
   if (start === 0) {
-    commentsContainerEl.textContent = '';
+    commentsContainerElement.textContent = '';
   }
   post.comments.slice(start, shownCommentsCount).forEach(appendComment);
 };
 
-loadMoreEl.addEventListener('click', (evt) => {
+loadMoreElement.addEventListener('click', (evt) => {
   evt.preventDefault();
   setShownCommentsCount(shownCommentsCount + LOAD_MORE_COMMENTS_COUNT);
 });
 
 const refreshModal = () => {
-  mainImgEl.src = post.url;
-  likesCountEl.textContent = post.likes;
+  mainImgElement.src = post.url;
+  likesCountElement.textContent = post.likes;
 
-  totalCommentsCountEl.textContent = post.comments.length;
-  descriptionEl.textContent = post.description;
+  totalCommentsCountElement.textContent = post.comments.length;
+  descriptionElement.textContent = post.description;
 
   setShownCommentsCount(INITIAL_COMMENTS_COUNT);
 };
