@@ -3,6 +3,20 @@ import * as imageProcessing from './image-proccessing.js';
 import { api } from './api.js';
 import { notification } from './notification.js';
 
+const MIN_COMMENT_LENGTH = 140;
+const MIN_HASHTAGS_COUNT = 5;
+const ERROR_TEXTS = {
+  description: {
+    length: 'Длина комментария не может составлять больше 140 символов',
+  },
+  hashtag: {
+    count: 'Кол-во хештегов не должно быть больше 5-ти',
+    format:
+      'Хештег должен начинаться с #, иметь длину не более 20 символов и не состоять лишь из одного символа #',
+    unique: 'Не должно быть повторяющихся хештегов',
+  },
+};
+
 const uploadInputElement = document.querySelector('input.img-upload__input');
 const uploadOverlayElement = document.querySelector('.img-upload__overlay');
 const uploadCancelElement = document.querySelector('.img-upload__cancel');
@@ -71,8 +85,8 @@ const stopPropagation = (evt) => {
   evt.stopPropagation();
 };
 
-hashtagsElement.addEventListener('keydown', stopPropagation);
-descriptionElement.addEventListener('keydown', stopPropagation);
+hashtagsElement.onkeydown = stopPropagation;
+descriptionElement.onkeydown = stopPropagation;
 
 let descriptionError;
 const setDescriptionError = (message) => {
@@ -88,10 +102,8 @@ const setDescriptionError = (message) => {
 addValidator(
   descriptionElement,
   (value) => {
-    if (value?.length > 140) {
-      setDescriptionError(
-        'Длина комментария не может составлять больше 140 символов'
-      );
+    if (value?.length > MIN_COMMENT_LENGTH) {
+      setDescriptionError(ERROR_TEXTS.description.length);
       return false;
     }
     setDescriptionError();
@@ -116,22 +128,20 @@ addValidator(
   hashtagsElement,
   (value) => {
     const hashtags = value.trim().toLowerCase().split(/\s+/);
-    if (hashtags.length > 5) {
-      setHashtagError('Кол-во хештегов не должно быть больше 5-ти');
+    if (hashtags.length > MIN_HASHTAGS_COUNT) {
+      setHashtagError(ERROR_TEXTS.hashtag.count);
       return false;
     }
 
     for (const hashtag of hashtags) {
       if (hashtag && !hashtagRegex.test(hashtag)) {
-        setHashtagError(
-          'Хештег должен начинаться с #, иметь длину не более 20 символов и не состоять лишь из одного символа #'
-        );
+        setHashtagError(ERROR_TEXTS.hashtag.format);
         return false;
       }
     }
     const unique = new Set(hashtags);
     if (unique.size < hashtags.length) {
-      setHashtagError('Не должно быть повторяющихся хештегов');
+      setHashtagError(ERROR_TEXTS.hashtag.unique);
       return false;
     }
 
