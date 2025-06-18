@@ -11,6 +11,10 @@ const clearPreviousMiniatures = () => {
 };
 
 const drawMiniatures = (posts) => {
+  if (!posts?.length) {
+    return;
+  }
+
   const similarListFragment = document.createDocumentFragment();
 
   clearPreviousMiniatures();
