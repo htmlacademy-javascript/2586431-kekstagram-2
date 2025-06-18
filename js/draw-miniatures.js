@@ -11,16 +11,20 @@ const clearPreviousMiniatures = () => {
 };
 
 const drawMiniatures = (posts) => {
+  if (!posts?.length) {
+    return;
+  }
+
   const similarListFragment = document.createDocumentFragment();
 
   clearPreviousMiniatures();
   posts.forEach((post) => {
     const { id, url, description, likes, comments } = post;
     const pictureTemplate = miniatureTemplate.cloneNode(true);
-    const pictureEl = pictureTemplate.querySelector('.picture');
+    const pictureElement = pictureTemplate.querySelector('.picture');
     const pictureImg = pictureTemplate.querySelector('.picture__img');
 
-    pictureEl.id = id;
+    pictureElement.id = id;
     pictureImg.src = url;
     pictureImg.alt = description;
 
@@ -28,7 +32,7 @@ const drawMiniatures = (posts) => {
     pictureTemplate.querySelector('.picture__comments').textContent =
       comments.length;
 
-    pictureEl.addEventListener('click', (evt) => {
+    pictureElement.addEventListener('click', (evt) => {
       evt.preventDefault();
       openPost(post);
     });
