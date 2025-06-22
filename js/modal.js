@@ -1,4 +1,6 @@
-import { isEscapeKey } from './util.js';
+import { EscManager } from './esc-manager.js';
+
+const escManager = new EscManager();
 
 class Modal {
   constructor(modalElement, closeButtonElement, cfg) {
@@ -12,26 +14,19 @@ class Modal {
     });
   }
 
-  onDocumentKeydown = (evt) => {
-    if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      this.close();
-    }
-  };
-
-  open() {
+  open = () => {
     this.modalElement.classList.remove('hidden');
     document.body.classList.add('modal-open');
-    document.onkeydown = this.onDocumentKeydown;
+    escManager.addLayer(this.close);
     this.onOpen?.();
-  }
+  };
 
-  close() {
+  close = () => {
     this.modalElement.classList.add('hidden');
     document.body.classList.remove('modal-open');
-    document.onkeydown = undefined;
+    escManager.removeLayer(this.close);
     this.onClose?.();
-  }
+  };
 }
 
 export { Modal };

@@ -3,6 +3,9 @@ import * as imageProcessing from './image-proccessing.js';
 import { api } from './api.js';
 import { notification } from './notification.js';
 
+const ERROR_CLASSNAME = 'pristine-error img-upload__field-wrapper--error';
+const HASHTAG_REGEX = /^#[a-zа-яё0-9]{1,19}$/i;
+
 const MIN_COMMENT_LENGTH = 140;
 const MIN_HASHTAGS_COUNT = 5;
 const ERROR_TEXTS = {
@@ -30,8 +33,6 @@ const submitElement = document.querySelector('.img-upload__submit');
 imageProcessing.initialize();
 
 const pristine = new Pristine(formElement);
-
-const ERROR_CLASSNAME = 'pristine-error img-upload__field-wrapper--error';
 
 const addValidator = (inputElement, callback, message) => {
   pristine.addValidator(
@@ -111,8 +112,6 @@ addValidator(
   ''
 );
 
-const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
-
 let hashtagError;
 const setHashtagError = (message) => {
   hashtagError?.remove();
@@ -134,7 +133,7 @@ addValidator(
     }
 
     for (const hashtag of hashtags) {
-      if (hashtag && !hashtagRegex.test(hashtag)) {
+      if (hashtag && !HASHTAG_REGEX.test(hashtag)) {
         setHashtagError(ERROR_TEXTS.hashtag.format);
         return false;
       }

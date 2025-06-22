@@ -6,24 +6,13 @@ const SUCCESS_STATUS_END = 299;
 const getUrl = (endpoint) =>
   `${BASE_URL}/${endpoint[0] === '/' ? endpoint.slice(1) : endpoint}`;
 
-const isSuccess = (response) => {
-  if (
-    response.status >= SUCCESS_STATUS_START &&
-    response.status <= SUCCESS_STATUS_END
-  ) {
-    return true;
-  }
-  return false;
-};
+const isSuccess = (response) =>
+  response.status >= SUCCESS_STATUS_START &&
+  response.status <= SUCCESS_STATUS_END;
 
-const isError = (response) => {
-  if (response.status >= ERROR_STATUS_START) {
-    return true;
-  }
-  return false;
-};
+const isError = (response) => response.status >= ERROR_STATUS_START;
 
-const dataHandler = async (response) => {
+const handleData = async (response) => {
   if (isSuccess(response)) {
     return response.json();
   } else if (isError(response)) {
@@ -34,13 +23,13 @@ const dataHandler = async (response) => {
 
 /** axios at home */
 const api = {
-  get: (endpoint, config) => fetch(getUrl(endpoint), config).then(dataHandler),
+  get: (endpoint, config) => fetch(getUrl(endpoint), config).then(handleData),
   post: (endpoint, body, config) =>
     fetch(getUrl(endpoint), {
       method: 'POST',
       body,
       ...config,
-    }).then(dataHandler),
+    }).then(handleData),
 };
 
 export { api };
